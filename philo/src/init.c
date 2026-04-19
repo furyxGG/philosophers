@@ -6,7 +6,7 @@
 /*   By: fyagbasa <fyagbasa@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/19 16:34:18 by fyagbasa          #+#    #+#             */
-/*   Updated: 2026/04/19 17:21:12 by fyagbasa         ###   ########.fr       */
+/*   Updated: 2026/04/19 21:04:19 by fyagbasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ void	init_forks(t_philo *philo)
 		pthread_mutex_init(&philo->forks[a], NULL);
 		a++;
 	}
+	pthread_mutex_init(&philo->printmutex, NULL);
+	philo->is_dead = 0;
 }
 
 void	init_philos(t_philo *philo)
@@ -35,10 +37,12 @@ void	init_philos(t_philo *philo)
 		return ;
 	while (a < philo->nop)
 	{
-		philo->persons[a].id = a;
+		philo->persons[a].id = a + 1;
 		philo->persons[a].l_hand = &philo->forks[a];
 		philo->persons[a].r_hand = &philo->forks[(a + 1) % philo->nop];
 		philo->persons[a].eat_count = 0;
+		philo->persons[a].philo = philo;
+		philo->persons[a].last_eat = get_time();
 		a++;
 	}
 }
@@ -50,9 +54,11 @@ void	create_threads(t_philo *philo)
 	a = 0;
 	while (a < philo->nop)
 	{
-		pthread_create(&(philo->persons[a].thread), NULL, &routine, &philo->persons[a]);
+		pthread_create(&(philo->persons[a].thread),
+			NULL, &routine, &philo->persons[a]);
 		a++;
 	}
+	monitor(philo);
 	a = 0;
 	while (a < philo->nop)
 	{
