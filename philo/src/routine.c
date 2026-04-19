@@ -6,7 +6,7 @@
 /*   By: fyagbasa <fyagbasa@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/19 16:30:58 by fyagbasa          #+#    #+#             */
-/*   Updated: 2026/04/20 00:55:59 by fyagbasa         ###   ########.fr       */
+/*   Updated: 2026/04/20 00:56:26 by fyagbasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void	helper1(t_person *person)
 
 static void	helper2(t_person *person)
 {
-	int	hink_time;
+	int	think_time;
 
 	print_status(person, "is sleeping");
 	usleep(person->philo->tts * 1000);
