@@ -6,11 +6,19 @@
 /*   By: fyagbasa <fyagbasa@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/19 20:27:56 by fyagbasa          #+#    #+#             */
-/*   Updated: 2026/04/19 21:06:53 by fyagbasa         ###   ########.fr       */
+/*   Updated: 2026/04/20 00:26:23 by fyagbasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+static void	helper(t_philo *philo, int a)
+{
+	pthread_mutex_lock(&philo->printmutex);
+	printf("%lld %d died\n", get_time(), philo->persons[a].id);
+	philo->is_dead = 1;
+	pthread_mutex_unlock(&philo->printmutex);
+}
 
 void	monitor(t_philo *philo)
 {
@@ -25,10 +33,7 @@ void	monitor(t_philo *philo)
 		{
 			if (get_time() - philo->persons[a].last_eat >= philo->ttd)
 			{
-				pthread_mutex_lock(&philo->printmutex);
-				printf("%lld %d died\n", get_time(), philo->persons[a].id);
-				philo->is_dead = 1;
-				pthread_mutex_unlock(&philo->printmutex);
+				helper(philo, a);
 				return ;
 			}
 			if (philo->loop_count != -1

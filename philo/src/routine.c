@@ -6,19 +6,48 @@
 /*   By: fyagbasa <fyagbasa@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/19 16:30:58 by fyagbasa          #+#    #+#             */
-/*   Updated: 2026/04/19 21:06:35 by fyagbasa         ###   ########.fr       */
+/*   Updated: 2026/04/20 00:55:59 by fyagbasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+static void	helper1(t_person *person)
+{
+	pthread_mutex_lock(person->r_hand);
+	print_status(person, "has taken a fork");
+	person->last_eat = get_time();
+	print_status(person, "is eating");
+	usleep(person->philo->tte * 1000);
+	person->eat_count++;
+	pthread_mutex_unlock(person->l_hand);
+	pthread_mutex_unlock(person->r_hand);
+}
+
+static void	helper2(t_person *person)
+{
+	int	hink_time;
+
+	print_status(person, "is sleeping");
+	usleep(person->philo->tts * 1000);
+	print_status(person, "is thinking");
+	if (person->philo->nop % 2 != 0)
+	{
+		think_time = person->philo->tte - person->philo->tts;
+		if (think_time < 0)
+			think_time = 0;
+		usleep((think_time * 1000) + 5000);
+	}
+}
 
 void	*routine(void *arg)
 {
 	t_person	*person;
 
 	person = (t_person *)arg;
+	person->last_eat = get_time();
 	if (person->id % 2 == 0)
-		usleep(1000);
+		usleep((person->philo->tte * 1000) / 2);
 	while (1)
 	{
 		if (person->philo->is_dead == 1)
@@ -31,20 +60,11 @@ void	*routine(void *arg)
 			pthread_mutex_unlock(person->l_hand);
 			break ;
 		}
-		pthread_mutex_lock(person->r_hand);
-		print_status(person, "has taken a fork");
-		person->last_eat = get_time();
-		print_status(person, "is eating");
-		usleep(person->philo->tte * 1000);
-		person->eat_count++;
-		pthread_mutex_unlock(person->l_hand);
-		pthread_mutex_unlock(person->r_hand);
+		helper1(person);
 		if (person->philo->loop_count != -1
 			&& person->eat_count == person->philo->loop_count)
 			break ;
-		print_status(person, "is sleeping");
-		usleep(person->philo->tts * 1000);
-		print_status(person, "is thinking");
+		helper2(person);
 	}
 	return (NULL);
 }

@@ -6,13 +6,13 @@
 /*   By: fyagbasa <fyagbasa@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/19 16:34:18 by fyagbasa          #+#    #+#             */
-/*   Updated: 2026/04/19 21:04:19 by fyagbasa         ###   ########.fr       */
+/*   Updated: 2026/04/20 00:42:33 by fyagbasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	init_forks(t_philo *philo)
+static void	init_forks(t_philo *philo)
 {
 	int		a;
 
@@ -27,7 +27,7 @@ void	init_forks(t_philo *philo)
 	philo->is_dead = 0;
 }
 
-void	init_philos(t_philo *philo)
+static void	init_philos(t_philo *philo)
 {
 	int	a;
 
@@ -38,8 +38,16 @@ void	init_philos(t_philo *philo)
 	while (a < philo->nop)
 	{
 		philo->persons[a].id = a + 1;
-		philo->persons[a].l_hand = &philo->forks[a];
-		philo->persons[a].r_hand = &philo->forks[(a + 1) % philo->nop];
+		if (a == philo->nop - 1)
+		{
+			philo->persons[a].l_hand = &philo->forks[(a + 1) % philo->nop];
+			philo->persons[a].r_hand = &philo->forks[a];
+		}
+		else
+		{
+			philo->persons[a].l_hand = &philo->forks[a];
+			philo->persons[a].r_hand = &philo->forks[(a + 1) % philo->nop];
+		}
 		philo->persons[a].eat_count = 0;
 		philo->persons[a].philo = philo;
 		philo->persons[a].last_eat = get_time();
@@ -47,7 +55,7 @@ void	init_philos(t_philo *philo)
 	}
 }
 
-void	create_threads(t_philo *philo)
+static void	create_threads(t_philo *philo)
 {
 	int	a;
 
