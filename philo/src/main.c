@@ -12,6 +12,18 @@
 
 #include "philo.h"
 
+void	print_err(char *str, int i)
+{
+	int	a;
+
+	a = 0;
+	while (a < ft_strlen(str))
+	{
+		write(i, &str[a], 1);
+		a++;
+	}
+}
+
 static void	fill_philo(t_philo *m_philo, char **argv, int argc)
 {
 	m_philo->nop = ft_atoi(argv[1]);
@@ -71,13 +83,25 @@ int	main(int argc, char	**argv)
 	t_philo	*m_philo;
 
 	if (argc != 5 && argc != 6)
+	{
+		print_err("Error: Invalid number of arguments.\n", 2);
 		return (-1);
+	}
 	if (!check_argums(argv))
+	{
+		print_err("Error: Arguments must be positive numbers.\n", 2);
 		return (-1);
+	}
 	m_philo = malloc(sizeof(t_philo));
 	if (!m_philo)
+	{
+		print_err("Error: Memory allocation failed.\n", 2);
 		return (-1);
+	}
 	fill_philo(m_philo, argv, argc);
+	if (!check_null_phil(m_philo))
+		return (-1);
 	create_allthings(m_philo);
 	destroy_all(m_philo);
+	return (0);
 }

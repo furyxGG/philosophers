@@ -51,6 +51,8 @@ int			ft_isdigit(int c);
 int			ft_strlen(char *str);
 long long	get_time(void);
 void		print_status(t_person *person, char *status);
+int			check_null_phil(t_philo *philo);
+void		print_err(char *str, int i);
 
 void		*routine(void *arg);
 void		monitor(t_philo *philo);

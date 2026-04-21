@@ -30,17 +30,16 @@ static int	check_status(t_philo *philo)
 	while (++a < philo->nop)
 	{
 		pthread_mutex_lock(&philo->statemutex);
-		if (get_time() - philo->persons[a].last_eat >= philo->ttd)
+		if (philo->loop_count != -1
+			&& philo->persons[a].eat_count == philo->loop_count)
+			all_eat++;
+		else if (get_time() - philo->persons[a].last_eat >= philo->ttd)
 		{
 			helper(philo, a);
 			pthread_mutex_unlock(&philo->statemutex);
 			return (1);
 		}
-		if (philo->loop_count != -1
-			&& philo->persons[a].eat_count == philo->loop_count)
-			all_eat++;
 		pthread_mutex_unlock(&philo->statemutex);
-		a++;
 	}
 	if (all_eat == philo->nop)
 		return (2);

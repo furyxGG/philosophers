@@ -18,6 +18,11 @@ static void	init_forks(t_philo *philo)
 
 	a = 0;
 	philo->forks = malloc(sizeof(pthread_mutex_t) * philo->nop);
+	if (!philo->forks)
+	{
+		print_err("Error: Memory allocation failed for forks.\n", 2);
+		return ;
+	}
 	while (a < philo->nop)
 	{
 		pthread_mutex_init(&philo->forks[a], NULL);
@@ -28,13 +33,23 @@ static void	init_forks(t_philo *philo)
 	philo->is_dead = 0;
 }
 
+static int	philo_init_helper(t_philo *philo)
+{
+	philo->persons = malloc(sizeof(t_person) * philo->nop);
+	if (!philo->persons)
+	{
+		print_err("Error: Memory allocation failed for persons.\n", 2);
+		return (0);
+	}
+	return (1);
+}
+
 static void	init_philos(t_philo *philo)
 {
 	int	a;
 
 	a = 0;
-	philo->persons = malloc(sizeof(t_person) * philo->nop);
-	if (!philo->persons)
+	if (!philo_init_helper(philo))
 		return ;
 	while (a < philo->nop)
 	{

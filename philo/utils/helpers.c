@@ -49,3 +49,14 @@ void	print_status(t_person *person, char *status)
 	}
 	pthread_mutex_unlock(&person->philo->statemutex);
 }
+
+int	check_null_phil(t_philo *philo)
+{
+	if (philo->nop == 0)
+	{
+		print_err("Error: There must be at least 1 philosopher.\n", 2);
+		free (philo);
+		return (0);
+	}
+	return (1);
+}
