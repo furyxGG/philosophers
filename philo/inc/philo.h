@@ -6,7 +6,7 @@
 /*   By: fyagbasa <fyagbasa@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/19 14:55:12 by fyagbasa          #+#    #+#             */
-/*   Updated: 2026/04/19 21:02:52 by fyagbasa         ###   ########.fr       */
+/*   Updated: 2026/04/20 01:07:11 by fyagbasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ typedef struct s_philo
 	t_person		*persons;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	printmutex;
+	pthread_mutex_t	statemutex;
 }				t_philo;
 
 int			ft_atoi(const char *nptr);

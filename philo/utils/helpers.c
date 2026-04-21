@@ -6,7 +6,7 @@
 /*   By: fyagbasa <fyagbasa@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/19 15:27:49 by fyagbasa          #+#    #+#             */
-/*   Updated: 2026/04/19 21:03:46 by fyagbasa         ###   ########.fr       */
+/*   Updated: 2026/04/20 01:45:14 by fyagbasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,12 @@ long long	get_time(void)
 
 void	print_status(t_person *person, char *status)
 {
-	pthread_mutex_lock(&person->philo->printmutex);
+	pthread_mutex_lock(&person->philo->statemutex);
 	if (person->philo->is_dead == 0)
+	{
+		pthread_mutex_lock(&person->philo->printmutex);
 		printf("%lld %d %s\n", get_time(), person->id, status);
-	pthread_mutex_unlock(&person->philo->printmutex);
+		pthread_mutex_unlock(&person->philo->printmutex);
+	}
+	pthread_mutex_unlock(&person->philo->statemutex);
 }

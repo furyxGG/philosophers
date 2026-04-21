@@ -6,7 +6,7 @@
 /*   By: fyagbasa <fyagbasa@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/19 16:30:58 by fyagbasa          #+#    #+#             */
-/*   Updated: 2026/04/20 00:56:26 by fyagbasa         ###   ########.fr       */
+/*   Updated: 2026/04/21 09:39:52 by fyagbasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,12 @@ static void	helper1(t_person *person)
 {
 	pthread_mutex_lock(person->r_hand);
 	print_status(person, "has taken a fork");
+	pthread_mutex_lock(&person->philo->statemutex);
 	person->last_eat = get_time();
+	person->eat_count++;
+	pthread_mutex_unlock(&person->philo->statemutex);
 	print_status(person, "is eating");
 	usleep(person->philo->tte * 1000);
-	person->eat_count++;
 	pthread_mutex_unlock(person->l_hand);
 	pthread_mutex_unlock(person->r_hand);
 }
@@ -40,18 +42,41 @@ static void	helper2(t_person *person)
 	}
 }
 
+static void	lock_state(t_person *person)
+{
+	pthread_mutex_lock(&person->philo->statemutex);
+	person->last_eat = get_time();
+	pthread_mutex_unlock(&person->philo->statemutex);
+	if (person->id % 2 == 0)
+		usleep((person->philo->tte * 1000) / 2);
+}
+
+static int	stop_check(t_person *person)
+{
+	pthread_mutex_lock(&person->philo->statemutex);
+	if (person->philo->is_dead == 1)
+	{
+		pthread_mutex_unlock(&person->philo->statemutex);
+		return (1);
+	}
+	if (person->philo->loop_count != -1
+		&& person->eat_count == person->philo->loop_count)
+	{
+		pthread_mutex_unlock(&person->philo->statemutex);
+		return (1);
+	}
+	pthread_mutex_unlock(&person->philo->statemutex);
+	return (0);
+}
+
 void	*routine(void *arg)
 {
 	t_person	*person;
 
 	person = (t_person *)arg;
-	person->last_eat = get_time();
-	if (person->id % 2 == 0)
-		usleep((person->philo->tte * 1000) / 2);
-	while (1)
+	lock_state(person);
+	while (!stop_check(person))
 	{
-		if (person->philo->is_dead == 1)
-			break ;
 		pthread_mutex_lock(person->l_hand);
 		print_status(person, "has taken a fork");
 		if (person->philo->nop == 1)
@@ -61,8 +86,7 @@ void	*routine(void *arg)
 			break ;
 		}
 		helper1(person);
-		if (person->philo->loop_count != -1
-			&& person->eat_count == person->philo->loop_count)
+		if (stop_check(person))
 			break ;
 		helper2(person);
 	}

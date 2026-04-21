@@ -6,7 +6,7 @@
 /*   By: fyagbasa <fyagbasa@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/19 16:34:18 by fyagbasa          #+#    #+#             */
-/*   Updated: 2026/04/20 00:42:33 by fyagbasa         ###   ########.fr       */
+/*   Updated: 2026/04/20 01:07:29 by fyagbasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ static void	init_forks(t_philo *philo)
 		a++;
 	}
 	pthread_mutex_init(&philo->printmutex, NULL);
+	pthread_mutex_init(&philo->statemutex, NULL);
 	philo->is_dead = 0;
 }
 

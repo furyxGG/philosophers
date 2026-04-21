@@ -6,7 +6,7 @@
 /*   By: fyagbasa <fyagbasa@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/19 15:09:36 by fyagbasa          #+#    #+#             */
-/*   Updated: 2026/04/19 21:07:00 by fyagbasa         ###   ########.fr       */
+/*   Updated: 2026/04/20 01:48:42 by fyagbasa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,24 @@ static int	check_argums(char **argv)
 	return (1);
 }
 
+static void	destroy_all(t_philo *philo)
+{
+	int	a;
+
+	a = 0;
+	while (a < philo->nop)
+	{
+		pthread_mutex_destroy(&philo->forks[a]);
+		a++;
+	}
+	pthread_mutex_destroy(&philo->printmutex);
+	if (philo->forks)
+		free(philo->forks);
+	if (philo->persons)
+		free(philo->persons);
+	free(philo);
+}
+
 int	main(int argc, char	**argv)
 {
 	t_philo	*m_philo;
@@ -61,4 +79,5 @@ int	main(int argc, char	**argv)
 		return (-1);
 	fill_philo(m_philo, argv, argc);
 	create_allthings(m_philo);
+	destroy_all(m_philo);
 }
