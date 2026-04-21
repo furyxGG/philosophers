@@ -31,6 +31,7 @@ static void	init_forks(t_philo *philo)
 	pthread_mutex_init(&philo->printmutex, NULL);
 	pthread_mutex_init(&philo->statemutex, NULL);
 	philo->is_dead = 0;
+	philo->start_time = get_time();
 }
 
 static int	philo_init_helper(t_philo *philo)

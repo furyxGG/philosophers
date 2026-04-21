@@ -15,7 +15,8 @@
 static void	helper(t_philo *philo, int a)
 {
 	pthread_mutex_lock(&philo->printmutex);
-	printf("%lld %d died\n", get_time(), philo->persons[a].id);
+	printf("%lld %d died\n", get_time()
+		- philo->start_time, philo->persons[a].id);
 	philo->is_dead = 1;
 	pthread_mutex_unlock(&philo->printmutex);
 }

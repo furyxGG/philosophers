@@ -44,7 +44,8 @@ void	print_status(t_person *person, char *status)
 	if (person->philo->is_dead == 0)
 	{
 		pthread_mutex_lock(&person->philo->printmutex);
-		printf("%lld %d %s\n", get_time(), person->id, status);
+		printf("%lld %d %s\n", get_time()
+			- person->philo->start_time, person->id, status);
 		pthread_mutex_unlock(&person->philo->printmutex);
 	}
 	pthread_mutex_unlock(&person->philo->statemutex);
@@ -53,6 +54,12 @@ void	print_status(t_person *person, char *status)
 int	check_null_phil(t_philo *philo)
 {
 	if (philo->nop == 0)
+	{
+		print_err("Error: There must be at least 1 philosopher.\n", 2);
+		free (philo);
+		return (0);
+	}
+	if (philo->loop_count == 0)
 	{
 		print_err("Error: There must be at least 1 philosopher.\n", 2);
 		free (philo);

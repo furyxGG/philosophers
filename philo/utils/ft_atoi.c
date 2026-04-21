@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "philo.h"
+
 int	ft_atoi(const char *nptr)
 {
 	int	total;
@@ -31,4 +33,22 @@ int	ft_atoi(const char *nptr)
 		nptr++;
 	}
 	return (total * sign);
+}
+
+void	ft_usleep(long long time_in_ms, t_person *person)
+{
+	long long	start;
+
+	start = get_time();
+	while ((get_time() - start) < time_in_ms)
+	{
+		pthread_mutex_lock(&person->philo->statemutex);
+		if (person->philo->is_dead == 1)
+		{
+			pthread_mutex_unlock(&person->philo->statemutex);
+			break ;
+		}
+		pthread_mutex_unlock(&person->philo->statemutex);
+		usleep(500);
+	}
 }

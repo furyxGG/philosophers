@@ -40,6 +40,7 @@ typedef struct s_philo
 	int				tts;
 	int				loop_count;
 	int				is_dead;
+	long long		start_time;
 	t_person		*persons;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	printmutex;
@@ -53,6 +54,7 @@ long long	get_time(void);
 void		print_status(t_person *person, char *status);
 int			check_null_phil(t_philo *philo);
 void		print_err(char *str, int i);
+void		ft_usleep(long long time_in_ms, t_person *person);
 
 void		*routine(void *arg);
 void		monitor(t_philo *philo);

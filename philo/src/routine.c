@@ -21,7 +21,7 @@ static void	helper1(t_person *person)
 	person->eat_count++;
 	pthread_mutex_unlock(&person->philo->statemutex);
 	print_status(person, "is eating");
-	usleep(person->philo->tte * 1000);
+	ft_usleep(person->philo->tte, person);
 	pthread_mutex_unlock(person->l_hand);
 	pthread_mutex_unlock(person->r_hand);
 }
@@ -31,14 +31,14 @@ static void	helper2(t_person *person)
 	int	think_time;
 
 	print_status(person, "is sleeping");
-	usleep(person->philo->tts * 1000);
+	ft_usleep(person->philo->tts, person);
 	print_status(person, "is thinking");
 	if (person->philo->nop % 2 != 0)
 	{
 		think_time = person->philo->tte - person->philo->tts;
 		if (think_time < 0)
 			think_time = 0;
-		usleep((think_time * 1000) + 5000);
+		ft_usleep(think_time + 5, person);
 	}
 }
 
@@ -48,7 +48,7 @@ static void	lock_state(t_person *person)
 	person->last_eat = get_time();
 	pthread_mutex_unlock(&person->philo->statemutex);
 	if (person->id % 2 == 0)
-		usleep((person->philo->tte * 1000) / 2);
+		ft_usleep(person->philo->tte / 2, person);
 }
 
 static int	stop_check(t_person *person)
@@ -81,7 +81,7 @@ void	*routine(void *arg)
 		print_status(person, "has taken a fork");
 		if (person->philo->nop == 1)
 		{
-			usleep(person->philo->ttd * 1000);
+			ft_usleep(person->philo->ttd, person);
 			pthread_mutex_unlock(person->l_hand);
 			break ;
 		}
