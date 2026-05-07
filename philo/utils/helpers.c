@@ -61,7 +61,7 @@ int	check_null_phil(t_philo *philo)
 	}
 	if (philo->loop_count == 0)
 	{
-		print_err("Error: There must be at least 1 philosopher.\n", 2);
+		print_err("Error: There must be at least 1 loop.\n", 2);
 		free (philo);
 		return (0);
 	}
