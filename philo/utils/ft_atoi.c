@@ -14,8 +14,8 @@
 
 int	ft_atoi(const char *nptr)
 {
-	int	total;
-	int	sign;
+	long long	total;
+	int			sign;
 
 	total = 0;
 	sign = 1;
@@ -32,7 +32,10 @@ int	ft_atoi(const char *nptr)
 		total = total * 10 + (*nptr - '0');
 		nptr++;
 	}
-	return (total * sign);
+	if (total > 2147483647)
+		return (-1);
+	else
+		return ((int)(total * sign));
 }
 
 void	ft_usleep(long long time_in_ms, t_person *person)

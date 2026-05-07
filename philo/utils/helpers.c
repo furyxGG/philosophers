@@ -65,5 +65,11 @@ int	check_null_phil(t_philo *philo)
 		free (philo);
 		return (0);
 	}
+	if (philo->nop < 0 || philo->ttd < 0 || philo->tte < 0 || philo->tts < 0)
+	{
+		print_err("Error: Number out of int range.\n", 2);
+		free (philo);
+		return (0);
+	}
 	return (1);
 }
